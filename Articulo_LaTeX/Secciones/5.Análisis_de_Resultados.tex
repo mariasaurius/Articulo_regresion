@@ -1,0 +1,37 @@
+\subsection{Comparación con el artículo original}
+
+Lakdawala (2025) ajustaron el modelo cuadrático~\eqref{eq:cuadratico} con el programa Design Expert y reportaron un modelo significativo ($F = 90.49$, $p < 0.0001$), sin evidencia de falta de ajuste ($F = 0.97$, $p = 0.5454$). Según su tabla ANOVA, los términos significativos al 5\,\% fueron los cinco efectos principales, las interacciones ángulo $\times$ diámetro, ángulo $\times$ distancia, diámetro $\times$ distancia, diámetro $\times$ rodete y distancia $\times$ rodete, y los términos cuadráticos del ángulo y de la distancia. La Tabla~\ref{tab:anova_original} resume esos resultados como referencia para comparar.
+
+\begin{table}[H]
+\centering
+\caption{Resumen de la tabla ANOVA reportada por Lakdawala (2025) para el modelo cuadrático.}
+\label{tab:anova_original}
+\begin{tabular}{lccc}
+\toprule
+Término & $F$ & Valor $p$ & ¿Significativo al 5\,\%? \\
+\midrule
+Ángulo ($\alpha$)                 & 642.26 & $<0.0001$ & Sí \\
+Diámetro ($d_j$)                  & 29.26  & $<0.0001$ & Sí \\
+Distancia ($N_{sod}$)             & 157.85 & $<0.0001$ & Sí \\
+Tipo de rodete                    & 278.07 & $<0.0001$ & Sí \\
+Número de boquillas               & 349.69 & $<0.0001$ & Sí \\
+Ángulo $\times$ diámetro          & 15.81  & 0.0002    & Sí \\
+Ángulo $\times$ distancia         & 4.15   & 0.0459    & Sí \\
+Diámetro $\times$ distancia       & 4.43   & 0.0394    & Sí \\
+Diámetro $\times$ rodete          & 17.26  & 0.0001    & Sí \\
+Distancia $\times$ rodete         & 9.22   & 0.0035    & Sí \\
+Ángulo$^2$                        & 50.33  & $<0.0001$ & Sí \\
+Distancia$^2$                     & 7.49   & 0.0081    & Sí \\
+Diámetro$^2$                      & 3.10   & 0.0834    & No \\
+Diámetro $\times$ boquillas       & 2.90   & 0.0936    & No \\
+Ángulo $\times$ boquillas         & 2.06   & 0.1565    & No \\
+Ángulo $\times$ rodete            & 0.29   & 0.5926    & No \\
+Rodete $\times$ boquillas         & 0.18   & 0.6756    & No \\
+Distancia $\times$ boquillas      & 0.03   & 0.8676    & No \\
+\midrule
+Falta de ajuste                   & 0.97   & 0.5454    & No \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\pendiente{Comparar estos resultados con los de tu modelo: ¿se repiten los términos significativos?, ¿cambian las conclusiones al revisar supuestos y puntos influyentes?}

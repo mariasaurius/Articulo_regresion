@@ -1,0 +1,53 @@
+\newcommand{\portadacapitulo}[2]{
+% #1 = tipo (ACTIVIDAD, CAPÍTULO, TALLER...)
+% #2 = título
+
+\refstepcounter{chapter}
+
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\node[
+opacity=0.025
+]
+at (current page.center)
+{
+\includegraphics[width=0.55\paperwidth]
+{Imágenes/escudo_marca_agua.png}
+};
+
+\end{tikzpicture}
+
+\vspace*{\fill}
+
+\begin{center}
+
+{\color{verdeUN}\rule{3cm}{1.2pt}}
+
+\vspace{1.2cm}
+
+{\AncizarSansSemiBold
+\fontsize{36}{42}\selectfont
+\color{rojoUN}
+#1 \thechapter}
+
+\vspace{0.8cm}
+
+{\AncizarSerifRegular
+\fontsize{22}{28}\selectfont
+#2}
+
+\vspace{1.2cm}
+
+{\color{verdeUN}\rule{3cm}{1.2pt}}
+
+\end{center}
+
+\vspace*{\fill}
+
+\end{titlepage}
+
+\addcontentsline{toc}{chapter}{#2}
+}

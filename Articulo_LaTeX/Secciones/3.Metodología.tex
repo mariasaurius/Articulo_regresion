@@ -1,0 +1,24 @@
+\subsection{Datos}
+\label{sec:datos}
+
+Los datos provienen de la Tabla~6 de Lakdawala (2025) y corresponden a las 80 corridas descritas en la introducción. La variable respuesta es la eficiencia hidráulica, expresada como proporción (entre 0 y 1). La Tabla~\ref{tab:variables} resume las variables y el nombre con el que aparecen en la base de datos.
+
+\begin{table}[H]
+\centering
+\caption{Variables del estudio.}
+\label{tab:variables}
+\begin{tabular}{llll}
+\toprule
+Variable & Nombre en R & Tipo & Niveles \\
+\midrule
+Eficiencia hidráulica ($y$)            & \texttt{eficiencia} & Respuesta numérica   & 0.6025 a 0.7165 \\
+Ángulo de la boquilla ($\alpha$)       & \texttt{angulo}     & Numérica (grados)    & 90, 92.5, 95 \\
+Diámetro de la boquilla ($d_j$)        & \texttt{diametro}   & Numérica (mm)        & 10, 12, 14 \\
+Distancia boquilla-rodete ($N_{sod}$)  & \texttt{distancia}  & Numérica (mm)        & 40, 50, 60 \\
+Tipo de rodete                         & \texttt{rodete}     & Categórica           & Pelton (PTR), Turgo (TTR) \\
+Número de boquillas ($n$)              & \texttt{boquillas}  & Categórica           & 1, 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Los datos y el código del análisis están disponibles en \enlacerepositorio. El script \texttt{anal\_descrip.R} lee los datos desde el repositorio y produce todas las tablas, cifras y figuras de la Sección~\ref{sec:resultados}.

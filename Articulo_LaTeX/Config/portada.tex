@@ -1,0 +1,168 @@
+% Portada: los textos salen de Config/datos.tex
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture,overlay]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MARCA DE AGUA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\node[
+anchor=south east,
+opacity=0.05,
+inner sep=0pt
+]
+at ([xshift=-0.5cm,yshift=0.5cm]current page.south east)
+{
+\includegraphics[width=10cm]
+{Imágenes/escudo_marca_agua.png}
+};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ENCABEZADO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\node[
+anchor=north west,
+xshift=1.8cm,
+yshift=-1.8cm
+]
+(logo)
+at (current page.north west)
+{
+\includegraphics[height=2.8cm]
+{Imágenes/logo_unal.png}
+};
+
+% Línea vertical
+\draw[
+color=grisClaroUN,
+line width=0.6pt
+]
+([xshift=0.55cm,yshift=-0.25cm]logo.north east)
+--
+([xshift=0.55cm,yshift=0.25cm]logo.south east);
+
+% Departamento
+\node[ anchor=west, align=left, font=\AncizarSansMedium\small, text=black, xshift=1cm ] at (logo.east) { \departamento };
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CONTENIDO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\coordinate (inicioTexto)
+at ([xshift=2.2cm,yshift=-10cm]
+current page.north west);
+
+\node[
+anchor=west,
+font=\AncizarSansSemiBold\fontsize{46}{50}\selectfont,
+text=rojoUN
+]
+(titulo)
+at (inicioTexto)
+{
+\tipotrabajo
+};
+
+\draw[
+color=verdeUN,
+line width=1.8pt
+]
+([yshift=-0.45cm]titulo.south west)
+--
+([xshift=15cm,yshift=-0.45cm]
+titulo.south west);
+
+\node[
+anchor=west,
+font=\AncizarSansMedium\fontsize{22}{26}\selectfont,
+yshift=-2.1cm
+]
+(subtitulo)
+at (titulo.south west)
+{
+\materia
+};
+
+\draw[
+color=verdeUN,
+line width=1.8pt
+]
+([yshift=-1.8cm]subtitulo.south west)
+--
+([xshift=2.2cm,yshift=-1.8cm]
+subtitulo.south west);
+
+\node[
+anchor=west,
+align=left,
+font=\AncizarSansMedium\fontsize{18}{24}\selectfont,
+yshift=-4.5cm
+]
+(autor)
+at (subtitulo.south west)
+{
+\autoresportada
+};
+
+\draw[
+color=verdeUN,
+line width=1.8pt
+]
+([yshift=-1cm]autor.south west)
+--
+([xshift=2.2cm,yshift=-1cm]
+autor.south west);
+
+\node[
+anchor=west,
+align=left,
+yshift=-2.5cm
+]
+at (autor.south west)
+{
+{\AncizarSansLightItalic\small\color{rojoUN} Profesor}\\[0.2cm]
+{\AncizarSansRegular\Large \profesor}
+};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PIE DE PÁGINA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\draw[
+color=grisClaroUN,
+line width=0.8pt
+]
+([xshift=1cm,yshift=2.5cm]
+current page.south west)
+--
+([xshift=-1cm,yshift=2.5cm]
+current page.south east);
+
+\node[
+anchor=west,
+font=\AncizarSansMedium\normalsize,
+text=grisOscuroUN,
+xshift=1cm,
+yshift=1.8cm
+]
+at (current page.south west)
+{
+\textbf{\color{verdeUN}CÓDIGO:}
+\codigo
+};
+
+\node[
+anchor=east,
+font=\AncizarSansLightItalic\normalsize,
+text=grisOscuroUN,
+xshift=-1cm,
+yshift=1.8cm
+]
+at (current page.south east)
+{
+\today
+};
+
+\end{tikzpicture}

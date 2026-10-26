@@ -1,0 +1,49 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PRIMERA PÁGINA DEL ARTÍCULO
+% ---------------------------------------------------
+% Mismos elementos que la plantilla del profesor
+% (título, título en inglés, autores, afiliaciones),
+% con el encabezado UNAL de mi portada.
+% Los textos salen de Config/datos.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\tituloarticulo}{%
+\thispagestyle{plain}%
+\noindent
+\begin{tikzpicture}
+  % Logo
+  \node[anchor=west, inner sep=0pt] (logo) at (0,0)
+    {\includegraphics[height=1.5cm]{Imágenes/logo_unal.png}};
+  % Línea vertical
+  \draw[color=grisClaroUN, line width=0.6pt]
+    ([xshift=0.45cm,yshift=-0.15cm]logo.north east) --
+    ([xshift=0.45cm,yshift=0.15cm]logo.south east);
+  % Departamento
+  \node[anchor=west, align=left, font=\AncizarSansMedium\footnotesize,
+        xshift=0.85cm] at (logo.east) {\departamento};
+  % Curso y semestre a la derecha
+  \node[anchor=east, align=right, font=\AncizarSansLightItalic\footnotesize,
+        text=grisOscuroUN] at (\textwidth,0)
+    {\materia\\ Semestre \semestre};
+\end{tikzpicture}
+\par\vspace{1.1cm}
+%
+% Título
+{\raggedright\AncizarSansSemiBold\fontsize{24}{29}\selectfont
+ \color{rojoUN}\titulo\par}
+\vspace{0.35cm}
+{\color{verdeUN}\rule{4cm}{1.8pt}}\par
+\vspace{0.3cm}
+% Título en inglés (el "subtitle" de la plantilla del profesor)
+{\raggedright\AncizarSansLightItalic\fontsize{14}{18}\selectfont
+ \color{grisOscuroUN}\tituloingles\par}
+\vspace{0.7cm}
+%
+% Autores y afiliaciones
+{\AncizarSansMedium\large\autoresarticulo\par}
+\vspace{0.2cm}
+{\footnotesize\color{grisOscuroUN}\afiliaciones\par}
+\vspace{0.25cm}
+{\footnotesize{\AncizarSansLightItalic\color{rojoUN}Profesor:}\ \profesor\par}
+\vspace{0.6cm}
+}

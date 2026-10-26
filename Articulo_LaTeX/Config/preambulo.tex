@@ -1,0 +1,483 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% IDIOMA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% es-tabla       -> "Tabla" en vez de "Cuadro"
+% es-nodecimaldot -> el punto decimal se queda como punto (igual que en R)
+% es-noquoting   -> evita conflictos de < y > con TikZ
+\usepackage[english,spanish,es-tabla,es-nodecimaldot,es-noquoting]{babel}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GEOMETRÍA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[
+top=0.65in,
+bottom=0.65in,
+left=0.65in,
+right=0.65in
+]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ENCABEZADO Y PIE DE PÁGINA (estilo artículo)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+
+% Páginas normales: título corto a la izquierda,
+% curso a la derecha y línea roja, como en la revista
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\AncizarSansRegular\color{grisOscuroUN}\titulocorto}
+\fancyhead[R]{\footnotesize\AncizarSansRegular\color{grisOscuroUN}\materia\ \textbullet\ \semestre}
+\fancyfoot[C]{\AncizarSansRegular\thepage}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\headrule}{{\color{rojoUN}\hrule width\headwidth height\headrulewidth}}
+
+% Primera página del artículo: solo el número de página
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\AncizarSansRegular\thepage}
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FUENTES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fontspec}
+\usepackage{microtype}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MATEMÁTICAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{bm}        % letras griegas en negrita: \bm{\beta}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GRÁFICOS Y TABLAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{pdflscape}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COLORES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[dvipsnames,table]{xcolor}
+\usepackage{colortbl}
+\input{Articulo_LaTeX/Config/colores}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TIKZ
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{tikz}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% HIPERVÍNCULOS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% REFERENCIAS (igual que la plantilla del profesor)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \citet{clave}  -> Autor (año)
+% \citep{clave}  -> (Autor, año)
+
+%\usepackage[round]{natbib}
+%\bibliographystyle{abbrvnat-es}   % abbrvnat en español (archivo abbrvnat-es.bst)
+%\setlength{\bibsep}{4pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CAJAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[most]{tcolorbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CAPTIONS Y LISTAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{caption}
+\usepackage{enumitem}
+
+\captionsetup{font=small, labelfont=bf, labelsep=period, margin=0.5cm}
+\setlength{\belowcaptionskip}{6pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NÚMEROS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{siunitx}
+
+\sisetup{
+table-number-alignment = center,
+input-symbols = {+},
+table-space-text-post = {+}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECCIONES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{titlesec}
+
+\titleformat{\section}
+{\Large\bfseries}
+{\thesection.}{0.5em}{}
+[\vspace{0.3em}\color{rojoUN}\titlerule]
+
+\titleformat{\subsection}
+{\large\bfseries\color{verdeOscuroUN}}
+{\thesubsection.}{0.5em}{}
+
+\titleformat{\subsubsection}
+{\normalsize\bfseries\itshape}
+{\thesubsubsection.}{0.5em}{}
+
+\titlespacing*{\section}{0pt}{2.2ex plus 0.5ex}{1.2ex}
+\titlespacing*{\subsection}{0pt}{1.8ex plus 0.5ex}{0.8ex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COLORBOX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtcolorbox{cuadro_verde}[1]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=verdeUN,
+    colbacktitle=verdeUN,
+    coltitle=white,
+    fonttitle=\AncizarSansSemiBold,
+    title=#1,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm
+}
+
+\newtcolorbox{cuadro_verdeOscuro}[1]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=verdeOscuroUN,
+    colbacktitle=verdeOscuroUN,
+    coltitle=white,
+    fonttitle=\AncizarSansSemiBold,
+    title=#1,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm
+}
+
+\newtcolorbox{cuadro_rojo}[1]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=rojoUN,
+    colbacktitle=rojoUN,
+    coltitle=white,
+    fonttitle=\AncizarSansSemiBold,
+    title=#1,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm
+}
+
+\newtcolorbox{cuadro_rojo_Oscuro}[1]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=rojoOscuroUN,
+    colbacktitle=rojoOscuroUN,
+    coltitle=white,
+    fonttitle=\AncizarSansSemiBold,
+    title=#1,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm
+}
+
+\newtcolorbox{cuadro_grisClaro}[1]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=grisClaroUN,
+    colbacktitle=grisClaroUN,
+    coltitle=white,
+    fonttitle=\AncizarSansSemiBold,
+    title=#1,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm
+}
+
+\newtcolorbox{cuadro_grisOscuro}[1]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=grisOscuroUN,
+    colbacktitle=grisOscuroUN,
+    coltitle=white,
+    fonttitle=\AncizarSansSemiBold,
+    title=#1,
+    boxrule=0.8pt,
+    arc=2mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm
+}
+
+
+\newtcolorbox{nota}{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=verdeUN,
+    borderline west={3pt}{0pt}{verdeUN},
+    boxrule=0pt,
+    arc=0mm,
+    left=5mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LISTINGS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FUENTE JETBRAINS MONO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Usa IBM Plex Mono si está instalada; si no (por ejemplo
+% en otro computador), usa la JetBrains Mono que viene en
+% Config/Fuentes, para que el documento siempre compile.
+\IfFontExistsTF{IBM Plex Mono}{%
+  \setmonofont{IBM Plex Mono}%
+}{%
+  \setmonofont{JetBrainsMono}[
+  Path=Config/Fuentes/JetBrains/,
+  Extension=.ttf,
+  UprightFont=*-Regular,
+  ItalicFont=*-Italic,
+  BoldFont=JetBrainsMonoNL-Bold,
+  BoldItalicFont=JetBrainsMonoNL-BoldItalic,
+  Scale=0.9
+  ]%
+}
+
+
+\usepackage{listings}
+
+\lstdefinestyle{Rcode}{
+language=R,
+backgroundcolor=\color{bgcream},
+keywordstyle=\color{keywordcolor}\bfseries,
+commentstyle=\color{commentcolor}\itshape,
+stringstyle=\color{stringcolor},
+basicstyle=\fontsize{10}{14}\ttfamily\selectfont,
+numbers=left,
+numberstyle=\footnotesize\color{grisClaroUN},
+numbersep=8pt,
+frame=single,
+rulecolor=\color{grisClaroUN},
+breaklines=true,
+showstringspaces=false,
+morekeywords={library,ggplot,df2,zcounts},
+xleftmargin=10pt,
+framesep=6pt
+}
+
+\lstdefinestyle{Routput}{
+basicstyle=\fontsize{10}{14}\ttfamily\selectfont,
+backgroundcolor=\color{white},
+frame=single,
+rulecolor=\color{grisClaroUN},
+breaklines=true,
+showstringspaces=false,
+numbers=none,
+xleftmargin=10pt,
+framesep=6pt
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FUENTE PRINCIPAL DEL DOCUMENTO (SERIF)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% (sintaxis estándar de fontspec: funciona también con
+% versiones de TeX Live más viejas)
+\setmainfont{AncizarSerif}[
+Path=Config/Fuentes/Serif/,
+Extension=.ttf,
+UprightFont=*-Regular,
+ItalicFont=*-Italic,
+BoldFont=*-Bold,
+BoldItalicFont=*-BoldItalic
+]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FUENTES SANS (PORTADA)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newfontfamily\AncizarSansMedium[
+Path=Config/Fuentes/Sans/
+]
+{AncizarSans-Medium.ttf}
+
+\newfontfamily\AncizarSansLight[
+Path=Config/Fuentes/Sans/
+]
+{AncizarSans-Light.ttf}
+
+\newfontfamily\AncizarSansLightItalic[
+Path=Config/Fuentes/Sans/
+]
+{AncizarSans-LightItalic.ttf}
+
+\newfontfamily\AncizarSansRegular[
+Path=Config/Fuentes/Sans/
+]
+{AncizarSans-Regular.ttf}
+
+\newfontfamily\AncizarSansSemiBold[
+Path=Config/Fuentes/Sans/
+]
+{AncizarSans-SemiBold.ttf}
+
+\newfontfamily\AncizarSansExtraBold[
+Path=Config/Fuentes/Sans/
+]
+{AncizarSans-ExtraBold.ttf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FUENTES SERIF AUXILIARES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newfontfamily\AncizarSerifMedium[
+Path=Config/Fuentes/Serif/
+]
+{AncizarSerif-Medium.ttf}
+
+\newfontfamily\AncizarSerifLight[
+Path=Config/Fuentes/Serif/
+]
+{AncizarSerif-Light.ttf}
+
+\newfontfamily\AncizarSerifLightItalic[
+Path=Config/Fuentes/Serif/
+]
+{AncizarSerif-LightItalic.ttf}
+
+\newfontfamily\AncizarSerifRegular[
+Path=Config/Fuentes/Serif/
+]
+{AncizarSerif-Regular.ttf}
+
+\newfontfamily\AncizarSerifSemiBold[
+Path=Config/Fuentes/Serif/
+]
+{AncizarSerif-SemiBold.ttf}
+
+\newfontfamily\AncizarSerifExtraBold[
+Path=Config/Fuentes/Serif/
+]
+{AncizarSerif-ExtraBold.ttf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESUMEN Y ABSTRACT (estructura de la plantilla
+% del profesor, con el estilo de cajas de la mía)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Uso:
+% \begin{resumen}
+%   texto...
+%   \palabrasclave{palabra 1, palabra 2}
+% \end{resumen}
+
+\newcommand{\palabrasclave}[1]{%
+  \par\medskip\noindent{\AncizarSansSemiBold\color{rojoUN}Palabras clave:}\ #1.}
+\newcommand{\keywords}[1]{%
+  \par\medskip\noindent{\AncizarSansSemiBold\color{rojoUN}Keywords:}\ #1.}
+
+\newtcolorbox{cajaresumen}[1]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=verdeUN,
+    borderline west={3pt}{0pt}{verdeUN},
+    boxrule=0pt,
+    arc=0mm,
+    left=5mm, right=3mm, top=2mm, bottom=2mm,
+    fontupper=\small,
+    title={#1},
+    coltitle=rojoUN,
+    colbacktitle=white,
+    fonttitle=\AncizarSansSemiBold\large,
+    attach title to upper={\par\smallskip}
+}
+
+\newenvironment{resumen}{\begin{cajaresumen}{Resumen}}{\end{cajaresumen}}
+\renewenvironment{abstract}{\begin{cajaresumen}{Abstract}\selectlanguage{english}}{\end{cajaresumen}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MODO BORRADOR: notas de lo que falta
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \pendiente{...} muestra una caja roja mientras
+% \borradortrue esté activo en main.tex. Con
+% \borradorfalse desaparecen todas de una vez.
+
+\newif\ifborrador
+\borradortrue
+
+\newcommand{\pendiente}[1]{%
+  \ifborrador
+  \begin{cuadro_rojo}{Pendiente}#1\end{cuadro_rojo}%
+  \fi}
+
+% Enlace al repositorio (el texto viene de Config/datos.tex)
+\newcommand{\enlacerepositorio}{\expandafter\url\expandafter{\repositorio}}
+
+% Parámetros de las figuras flotantes: permiten poner figuras grandes
+% junto con texto en la misma página (menos páginas medio vacías)
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{4}
+
+% Las figuras no se salen de su sección (no terminan después de las referencias)
+\usepackage[section]{placeins}

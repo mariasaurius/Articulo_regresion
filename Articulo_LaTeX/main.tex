@@ -1,0 +1,81 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ARTÍCULO CIENTÍFICO - ANÁLISIS DE REGRESIÓN
+% ---------------------------------------------------
+% COMPILAR CON XeLaTeX (las fuentes usan fontspec).
+% En Overleaf: Menú > Compilador > XeLaTeX.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt,letterpaper]{article}
+
+\input{Articulo_LaTeX/Config/datos}         
+\input{Articulo_LaTeX/Config/preambulo}
+\input{Articulo_LaTeX/Config/titulo_articulo}
+
+% ---------------------------------------------------
+% INTERRUPTORES
+% ---------------------------------------------------
+\newif\ifportada
+\portadafalse     % \portadatrue para poner mi portada al inicio
+\newif\ifindice
+\indicefalse      % \indicetrue para poner tabla de contenido
+\borradorfalse    % \borradortrue muestra las cajas "Pendiente"
+
+\begin{document}
+
+% ---------------- Portada opcional ----------------
+\ifportada
+  \input{Articulo_LaTeX/Config/portada}
+  \newpage
+\fi
+
+\ifindice
+  \renewcommand{\contentsname}{Tabla de contenido}
+  \tableofcontents
+  \newpage
+\fi
+
+% ---------------- Primera página ------------------
+\tituloarticulo
+
+\input{Articulo_LaTeX/Secciones/0.Resumen}
+
+% ---------------- Cuerpo --------------------------
+\section{Introducción}
+\label{sec:introduccion}
+\input{Articulo_LaTeX/Secciones/1.Introducción}
+
+\section{Metodología}
+\label{sec:metodologia}
+\input{Articulo_LaTeX/Secciones/3.Metodología}
+
+\section{Resultados}
+\label{sec:resultados}
+\input{Articulo_LaTeX/Secciones/4.Resultados}
+
+% \section{Análisis de resultados}
+% \label{sec:analisis}
+% \input{Secciones/5.Análisis_de_Resultados}
+%
+% \section{Conclusiones}
+% \label{sec:conclusiones}
+
+\FloatBarrier
+\input{Articulo_LaTeX/Secciones/6.Conclusiones}  
+
+% ---------------- Referencias ---------------------
+
+\section{Referencias bibliográficas}
+
+Lakdawala, H. N. (2025). Performance optimization of low-head vertical axis impulse turbine runners for nozzle angle, nozzle diameter, and nozzle standoff distance using response surface methodology. \textit{Journal Of Thermal Engineering}, 1392-1419. \url{https://doi.org/10.14744/thermal.0000983}
+
+El artículo se encuentra disponible en:
+
+\url{https://drive.google.com/file/d/11gxh1VBlpA0WJfVSf1WYcSbQmxDbRhIN/view?usp=sharing}
+
+% ---------------- Apéndices -----------------------
+\appendix
+\section{Glosario}
+\label{sec:glosario}
+\input{Articulo_LaTeX/Secciones/7.Glosario}
+
+\end{document}
