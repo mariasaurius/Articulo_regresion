@@ -25,28 +25,8 @@ library(ggplot2)
 library(GGally)
 
 theme_set(theme_bw())   # mismo estilo para todos los gráficos
-set.seed(2026)          # semilla: geom_jitter() mueve los puntos al azar;
-                        # con la semilla las figuras salen iguales siempre
-
-# Carpeta donde se guardan las figuras del artículo (Articulo_LaTeX/Figs).
-# Funciona si se corre desde la carpeta del repositorio o desde la
-# carpeta del proyecto de RStudio (Analisis_Regresion).
-carpeta_figs <- if (dir.exists("Articulo_LaTeX")) {
-  "Articulo_LaTeX/Figs"
-} else {
-  "Articulo_regresion/Articulo_LaTeX/Figs"
-}
-dir.create(carpeta_figs, recursive = TRUE, showWarnings = FALSE)
-
-# Función para guardar un gráfico en PDF.
-# - Se le quita el título y el subtítulo, porque en el artículo esa
-#   información va en el pie de la figura (\caption de LaTeX).
-# - ggsave() guarda el gráfico con el tamaño indicado en pulgadas.
-guardar <- function(grafico, nombre, ancho = 7, alto = 4.5) {
-  ggsave(filename = file.path(carpeta_figs, paste0(nombre, ".pdf")),
-         plot     = grafico + labs(title = NULL, subtitle = NULL),
-         width    = ancho, height = alto)
-}
+set.seed(2026)          # geom_jitter() mueve los puntos al azar; con la
+                        # semilla los gráficos salen iguales cada vez
 
 
 # -----------------------------------------------------------------
@@ -134,7 +114,6 @@ g1 <- ggplot(datos, aes(x = eficiencia)) +
        subtitle = "Línea roja: media",
        x = "Eficiencia hidráulica", y = "Densidad")
 print(g1)
-guardar(g1, "g1_histograma", ancho = 6, alto = 4)
 
 # Boxplot con los puntos observados
 g2 <- ggplot(datos, aes(x = "", y = eficiencia)) +
@@ -143,7 +122,6 @@ g2 <- ggplot(datos, aes(x = "", y = eficiencia)) +
   labs(title = "Boxplot de la eficiencia hidráulica",
        x = NULL, y = "Eficiencia hidráulica")
 print(g2)
-guardar(g2, "g2_boxplot", ancho = 3.5, alto = 4)
 
 
 # -----------------------------------------------------------------
@@ -182,7 +160,6 @@ g3 <- ggplot(largo, aes(x = nivel, y = eficiencia)) +
        subtitle = "Rombo rojo: media del grupo",
        x = NULL, y = "Eficiencia hidráulica")
 print(g3)
-guardar(g3, "g3_boxplot_por_variable", ancho = 8, alto = 5.5)
 
 
 # -----------------------------------------------------------------
@@ -204,7 +181,6 @@ g4 <- ggplot(largo, aes(x = nivel, y = eficiencia, group = 1)) +
   labs(title = "Eficiencia media e intervalo de confianza del 95 %",
        x = NULL, y = "Eficiencia hidráulica media")
 print(g4)
-guardar(g4, "g4_medias_ic95", ancho = 8, alto = 5.5)
 
 # Los mismos intervalos en una tabla, para citarlos en el artículo.
 # aggregate() aplica ic95() a la eficiencia de cada nivel de cada variable
@@ -243,9 +219,6 @@ p_distancia <- perfil("distancia", "Distancia boquilla-rodete (mm)")
 print(p_angulo)
 print(p_diametro)
 print(p_distancia)
-guardar(p_angulo,    "perfil_angulo",    ancho = 5.5, alto = 3.6)
-guardar(p_diametro,  "perfil_diametro",  ancho = 5.5, alto = 3.6)
-guardar(p_distancia, "perfil_distancia", ancho = 5.5, alto = 3.6)
 
 # Medias de cada combinación rodete - boquillas en cada nivel
 # (son los puntos de los gráficos de perfiles)
@@ -268,7 +241,6 @@ g5 <- ggplot(datos, aes(x = angulo, y = eficiencia, color = factor(diametro))) +
        x = "Ángulo de la boquilla (grados)", y = "Eficiencia hidráulica",
        color = "Diámetro (mm)")
 print(g5)
-guardar(g5, "g5_condicional", ancho = 7, alto = 5)
 
 # Eficiencia media para cada combinación de ángulo (filas) y diámetro
 # (columnas): sirve para ver si el efecto del diámetro cambia con el ángulo
@@ -292,13 +264,36 @@ round(cor(numericas, method = "spearman"), 3)  # correlaciones de Spearman
 # en la parte de arriba de la matriz, junto a la correlación total)
 by(numericas, datos$rodete, function(d) round(cor(d), 3))
 
-# Matriz de dispersión, coloreando por tipo de rodete
+# Matriz de dispersión, coloreando por tipo de rodete (verde = Pelton,
+# naranja = Turgo).
+# A ggpairs() no se le suman capas con "+" (escalas, títulos) porque eso
+# falla con algunas combinaciones de versiones de GGally y ggplot2. Los
+# colores se fijan con las opciones globales de ggplot2 y luego se
+# devuelven a como estaban.
+colores_rodete <- c("#1B9E77", "#D95F02")
+opciones_previas <- options(ggplot2.discrete.colour = colores_rodete,
+                            ggplot2.discrete.fill   = colores_rodete)
+
 g6 <- ggpairs(datos[, c("angulo", "diametro", "distancia", "eficiencia", "rodete")],
               mapping = aes(color = rodete, alpha = 0.5),
               columnLabels = c("Ángulo", "Diámetro", "Distancia",
-                               "Eficiencia", "Rodete")) +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  labs(title = "Matriz de dispersión por tipo de rodete")
-print(g6)
-guardar(g6, "g6_matriz_dispersion", ancho = 8, alto = 7)
+                               "Eficiencia", "Rodete"),
+              title = "Matriz de dispersión por tipo de rodete")
+
+# Si aun así no se puede dibujar, se usa la matriz de dispersión de R base
+dibujo_ok <- tryCatch({
+  suppressMessages(print(g6))
+  TRUE
+}, error = function(e) FALSE)
+
+if (!dibujo_ok) {
+  message("ggpairs() no se pudo dibujar con estas versiones de paquetes; ",
+          "se usa pairs() de R base")
+  pairs(numericas,
+        col = ifelse(datos$rodete == "Pelton", colores_rodete[1], colores_rodete[2]),
+        pch = 19,
+        labels = c("Ángulo", "Diámetro", "Distancia", "Eficiencia"),
+        main = "Matriz de dispersión (verde = Pelton, naranja = Turgo)")
+}
+
+options(opciones_previas)
