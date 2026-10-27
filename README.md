@@ -22,8 +22,6 @@ diseño de la boquilla y del rodete.
   <a href="Articulo_LaTeX/Articulo_regresion.pdf"><b>Ver el artículo en PDF</b></a>
 </p>
 
-Versión actual: introducción, datos y análisis descriptivo. El ajuste y la validación del modelo de
-regresión se agregarán en las siguientes entregas.
 
 ## Artículo de referencia
 
@@ -83,5 +81,4 @@ del repositorio.
 
 ## Fuente y licencia de los datos
 
-Los datos y las figuras del montaje experimental provienen del artículo citado arriba, publicado en acceso
-abierto bajo licencia CC BY-NC 4.0. Se usan aquí únicamente con fines académicos.
+Los datos y las figuras del montaje experimental provienen del artículo citado arriba. Se usan aquí únicamente con fines académicos.
