@@ -6,7 +6,7 @@
 %\usepackage[english,spanish]{babel}
 %\input{spanish.ldf}
 \usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+%\usepackage[latin1]{inputenc}
 \usepackage{Alegreya} %% Option 'black' gives heavier bold face 
 \renewcommand*\oldstylenums[1]{{\AlegreyaOsF #1}}
 %\usepackage[bitstream-charter]{mathdesign}
