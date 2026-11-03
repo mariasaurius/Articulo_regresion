@@ -28,6 +28,26 @@ theme_set(theme_bw())   # mismo estilo para todos los gráficos
 set.seed(2026)          # geom_jitter() mueve los puntos al azar; con la
                         # semilla los gráficos salen iguales cada vez
 
+# Carpeta donde se guardan las figuras del artículo (Articulo_Revista/Figs).
+# Funciona si se corre desde la carpeta del repositorio o desde la
+# carpeta del proyecto de RStudio (Analisis_Regresion).
+carpeta_figs <- if (dir.exists("Articulo_Revista")) {
+  "Articulo_Revista/Figs"
+} else {
+  "Articulo_regresion/Articulo_Revista/Figs"
+}
+dir.create(carpeta_figs, recursive = TRUE, showWarnings = FALSE)
+
+# Función para guardar un gráfico en PDF.
+# - Se le quita el título y el subtítulo, porque en el artículo esa
+#   información va en el pie de la figura (\caption de LaTeX).
+# - ggsave() guarda el gráfico con el tamaño indicado en pulgadas.
+guardar <- function(grafico, nombre, ancho = 7, alto = 4.5) {
+  ggsave(filename = file.path(carpeta_figs, paste0(nombre, ".pdf")),
+         plot     = grafico + labs(title = NULL, subtitle = NULL),
+         width    = ancho, height = alto)
+}
+
 
 # -----------------------------------------------------------------
 # 1. Lectura de los datos desde el repositorio de GitHub
@@ -45,6 +65,17 @@ datos$rodete    <- factor(datos$rodete, levels = c("PTR", "TTR"),
                           labels = c("Pelton", "Turgo"))
 datos$boquillas <- factor(datos$boquillas, levels = c(1, 2),
                           labels = c("1 boquilla", "2 boquillas"))
+
+# Corrección de dos corridas de la Tabla 6 (la misma de mod_lin.R).
+# En la Tabla 6 del artículo dos corridas tienen niveles mal digitados:
+#   - Corrida 12: dice ángulo 90°, pero el valor predicho que reportan los
+#     autores corresponde a ángulo 95°.
+#   - Corrida 15: dice distancia 40 mm, pero el valor predicho reportado
+#     corresponde a distancia 60 mm.
+# Se corrigen aquí para que el análisis descriptivo y el modelo usen
+# exactamente los mismos datos.
+datos$angulo[datos$corrida == 12]    <- 95
+datos$distancia[datos$corrida == 15] <- 60
 
 
 # -----------------------------------------------------------------
@@ -71,9 +102,8 @@ table(datos$rodete, datos$boquillas)
 factoriales <- subset(datos, angulo != 92.5 & diametro != 12 & distancia != 50)
 clave <- with(factoriales, paste(angulo, diametro, distancia, rodete, boquillas))
 factoriales[clave %in% clave[duplicated(clave)], ]
-# Las corridas 12 y 13 tienen los mismos valores pero eficiencias muy
-# distintas, y falta la combinación 95-14-40-Pelton-1 boquilla.
-# Posiblemente hay un error de digitación en la Tabla 6 del artículo.
+# Con la corrección de la sección 1 no queda ninguna combinación
+# repetida: cada nivel extremo tiene 20 corridas y el medio 40.
 
 
 # -----------------------------------------------------------------
@@ -114,6 +144,7 @@ g1 <- ggplot(datos, aes(x = eficiencia)) +
        subtitle = "Línea roja: media",
        x = "Eficiencia hidráulica", y = "Densidad")
 print(g1)
+guardar(g1, "g1_histograma", ancho = 6, alto = 4)
 
 # Boxplot con los puntos observados
 g2 <- ggplot(datos, aes(x = "", y = eficiencia)) +
@@ -122,6 +153,7 @@ g2 <- ggplot(datos, aes(x = "", y = eficiencia)) +
   labs(title = "Boxplot de la eficiencia hidráulica",
        x = NULL, y = "Eficiencia hidráulica")
 print(g2)
+guardar(g2, "g2_boxplot", ancho = 3.5, alto = 4)
 
 
 # -----------------------------------------------------------------
@@ -160,6 +192,7 @@ g3 <- ggplot(largo, aes(x = nivel, y = eficiencia)) +
        subtitle = "Rombo rojo: media del grupo",
        x = NULL, y = "Eficiencia hidráulica")
 print(g3)
+guardar(g3, "g3_boxplot_por_variable", ancho = 8, alto = 5.5)
 
 
 # -----------------------------------------------------------------
@@ -181,6 +214,7 @@ g4 <- ggplot(largo, aes(x = nivel, y = eficiencia, group = 1)) +
   labs(title = "Eficiencia media e intervalo de confianza del 95 %",
        x = NULL, y = "Eficiencia hidráulica media")
 print(g4)
+guardar(g4, "g4_medias_ic95", ancho = 8, alto = 5.5)
 
 # Los mismos intervalos en una tabla, para citarlos en el artículo.
 # aggregate() aplica ic95() a la eficiencia de cada nivel de cada variable
@@ -219,6 +253,9 @@ p_distancia <- perfil("distancia", "Distancia boquilla-rodete (mm)")
 print(p_angulo)
 print(p_diametro)
 print(p_distancia)
+guardar(p_angulo,    "perfil_angulo",    ancho = 5.5, alto = 3.6)
+guardar(p_diametro,  "perfil_diametro",  ancho = 5.5, alto = 3.6)
+guardar(p_distancia, "perfil_distancia", ancho = 5.5, alto = 3.6)
 
 # Medias de cada combinación rodete - boquillas en cada nivel
 # (son los puntos de los gráficos de perfiles)
@@ -241,6 +278,7 @@ g5 <- ggplot(datos, aes(x = angulo, y = eficiencia, color = factor(diametro))) +
        x = "Ángulo de la boquilla (grados)", y = "Eficiencia hidráulica",
        color = "Diámetro (mm)")
 print(g5)
+guardar(g5, "g5_condicional", ancho = 7, alto = 5)
 
 # Eficiencia media para cada combinación de ángulo (filas) y diámetro
 # (columnas): sirve para ver si el efecto del diámetro cambia con el ángulo
@@ -294,6 +332,17 @@ if (!dibujo_ok) {
         pch = 19,
         labels = c("Ángulo", "Diámetro", "Distancia", "Eficiencia"),
         main = "Matriz de dispersión (verde = Pelton, naranja = Turgo)")
+}
+
+# Para el artículo se guarda una copia sin título (el título va en el
+# \caption). Se cambia el campo $title en vez de usar "+" por lo explicado
+# arriba. ggsave() necesita las mismas opciones de color, por eso se
+# guarda antes de devolverlas a como estaban.
+if (dibujo_ok) {
+  g6_articulo <- g6
+  g6_articulo$title <- NULL
+  ggsave(filename = file.path(carpeta_figs, "g6_matriz_dispersion.pdf"),
+         plot = g6_articulo, width = 8, height = 7)
 }
 
 options(opciones_previas)
