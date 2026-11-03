@@ -1,0 +1,146 @@
+\documentclass{templateRevistaUPTCCiencias}
+%\usepackage{templateRevistaUPT}
+\usepackage{times,mathptmx}
+\usepackage{lastpage}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{minted}
+\usepackage{titlesec}
+\titleformat{\section}
+  {\normalfont\large\bfseries\centering}
+  {\thesection}
+  {1em}
+  {}
+\pagestyle{fancy}
+% -------------------------------------------------------------------------------------
+% Plantilla de un art\'iculo para publicar en la Revista Ciencia en Desarrollo
+% *************************************************************************************
+%
+% -------------------------------------------------------------------------------------
+% Espacio reservado para la carga de los paquetes por parte del autor
+% **** --------------------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{selinput}
+\SelectInputMappings{
+	aacute={á}
+}
+
+% Las siguientes dos lineas las usamos para generar las referencias
+% automaticamente
+\usepackage[round]{natbib}
+\bibliographystyle{abbrvnat}
+
+\usepackage{bm} % Para usar bold en letras griegas con \bm{}
+\usepackage{minted} % Code Highlighting with minted
+
+\usepackage[english]{babel}
+%\decimalpoint   % Para que los decimales fueran puntos
+
+\usepackage{hyperref} % Para usar hyper enlaces
+
+\usepackage{minted} % Code Highlighting with minted
+
+\usepackage{multirow} % Para celdas que ocupan varias filas en las tablas
+
+
+% //// --------------------------------------------------------------------------------
+% -------------------------------------------------------------------------------------
+% Espacio reservado para colocar las definiciones especiales por parte del autor
+% **** --------------------------------------------------------------------------------
+% Nombres en español para figuras, tablas y referencias (el artículo está en español)
+% Enlaces y citas sin recuadros de colores
+\hypersetup{hidelinks}
+
+\addto\captionsenglish{%
+  \renewcommand{\figurename}{Figura}%
+  \renewcommand{\tablename}{Tabla}%
+  \renewcommand{\refname}{Referencias}%
+}
+
+% //// --------------------------------------------------------------------------------
+% -------------------------------------------------------------------------------------
+% Espacio utilizado para colocar las palabras que necesitan partici\'on sil\'abica
+% **** --------------------------------------------------------------------------------
+\hyphenation{Colombia mul-ti-va-ria-do pro-ba-bi-li-dad es-ta-d\'is-ti-ca}
+% //// --------------------------------------------------------------------------------
+
+\begin{document}
+\fancypagestyle{plain}% Para la primera p\´agina
+{%
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyheadoffset[RE,LO]{-0.57\textwidth}
+\fancyhead[RO]{\includegraphics[scale=0.045]{logo cienciaendesarrollo-01.jpg}} %\footnotesize{Revista Ciencia en Desarrollo}}
+\fancyhead[LO]{Vol. 12 (n\'um. 1)\\ Enero-Junio 2021}
+\fancyfoot[CO]{\footnotesize{\thepage}}
+}
+
+
+\fancyhead{}
+%\fancyhead[CE]{\footnotesize{Hernández-Barajas, et al.}}
+\fancyhead[CO]{\footnotesize{EFICIENCIA HIDRÁULICA DE RODETES PELTON Y TURGO}}
+
+\fancyfoot{}
+\fancyfoot[RO]{\footnotesize{\thepage}}
+\fancyfoot[LE]{\footnotesize{\thepage}}
+\renewcommand{\headrulewidth}{1pt}
+\setlength{\columnsep}{6.5mm}
+
+%-------------------------------------------------------------------------------------
+% Espacio reservado para ingresar el t\'itulo del art\'iculo
+%--------------------------------------------------------------------------------
+\title{Modelos de regresión para la eficiencia hidráulica de rodetes Pelton y Turgo de eje vertical}
+\subtitle{Regression models for the hydraulic efficiency of vertical-axis Pelton and Turgo runners}
+\author{
+María Paula Ardila Otero$^{1,*}$\\
+\small{$^{1}$Estudiante de Ciencias de la Computación y de Estadística, Universidad Nacional de Colombia sede Medellín, Medellín, Colombia, mardilao@unal.edu.co}\\
+\small{\texttt{$^{*}$mardilao@unal.edu.co}}
+}
+\onecolumn
+\maketitle
+
+\footnotetext[1]{$^{*}$Author to whom correspondence 
+should be addressed.}
+
+% //// --------------------------------------------------------------------------------
+% -------------------------------------------------------------------------------------
+% CUERPO DEL DOCUMENTO
+% **** --------------------------------------------------------------------------------
+% -------------------------------------------------------------------------------------
+% Espacio reservado para colocar el resumen en el idioma principal y las palabras clave
+% No dejar salto de l\'inea entre el resumen y el comando \keywords{.}¡
+% **** --------------------------------------------------------------------------------
+\input{Secciones/0_Resumen}
+
+%-------------------------------------------------------------------------------
+% Cada sección está en su propio archivo dentro de la carpeta Secciones
+%-------------------------------------------------------------------------------
+\section{Introducción}
+\label{sec:introduccion}
+\input{Secciones/1_Introduccion}
+
+\section{Metodología}
+\label{sec:metodologia}
+\input{Secciones/2_Metodologia}
+
+\section{Resultados}
+\label{sec:resultados}
+\input{Secciones/3_Resultados}
+\input{Secciones/3_Resultados_modelo}
+
+\clearpage % para que todas las figuras queden antes de las referencias
+\input{Secciones/4_Disponibilidad}
+
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+\bibliography{mis_referencias}
+
+%-------------------------------------------------------------------------------
+\appendix
+\section{Glosario}
+\label{sec:glosario}
+\input{Secciones/A_Glosario}
+
+\end{document}
