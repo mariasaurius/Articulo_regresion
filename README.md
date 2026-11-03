@@ -13,15 +13,18 @@ diseño de la boquilla y del rodete.
 ## Artículo
 
 <p align="center">
-  <a href="Articulo_LaTeX/Articulo_regresion.pdf">
-    <img src="Articulo_LaTeX/vista_previa.png" width="380" alt="Primera página del artículo">
+  <a href="Articulo_Revista/articulo.pdf">
+    <img src="Articulo_Revista/vista_previa.png" width="380" alt="Primera página del artículo">
   </a>
 </p>
 
 <p align="center">
-  <a href="Articulo_LaTeX/Articulo_regresion.pdf"><b>Ver el artículo en PDF</b></a>
+  <a href="Articulo_Revista/articulo.pdf"><b>Ver el artículo en PDF</b></a>
 </p>
 
+Versión actual: introducción, datos, análisis descriptivo y réplica del modelo de regresión de segundo
+orden reportado en el artículo original (ANOVA, medidas de ajuste, ecuaciones, diagnósticos y superficies
+de respuesta).
 
 ## Artículo de referencia
 
@@ -45,10 +48,11 @@ diseño central compuesto (CCD) con cabeza hidráulica constante de 10 m.
 | `boquillas`  | Número de boquillas                                  | Categórica    | 1 o 2                     |
 | `eficiencia` | Eficiencia hidráulica (**variable respuesta**)       | Numérica      | proporción (0 a 1)        |
 
-**Nota sobre los datos:** las corridas 12 y 13 tienen los mismos valores en las cinco variables explicativas
-(90°, 14 mm, 40 mm, Pelton, 1 boquilla) pero eficiencias muy distintas (0.6285 y 0.6765), y en el diseño falta
-la combinación 95°, 14 mm, 40 mm, Pelton, 1 boquilla. Posiblemente se trata de un error de digitación en la
-Tabla 6 del artículo original. Los datos se dejaron tal como fueron publicados.
+**Nota sobre los datos:** `datos.xlsx` tiene los datos tal como fueron publicados. En dos corridas los niveles
+de la Tabla 6 no coinciden con los valores predichos que reportan los mismos autores: en la corrida 12 el ángulo
+corresponde a 95° (no a 90°) y en la corrida 15 la distancia corresponde a 60 mm (no a 40 mm). Los dos scripts
+corrigen esos niveles al leer los datos; con la corrección el diseño queda completo y el modelo reproduce
+exactamente los resultados del artículo.
 
 ## Análisis descriptivo en R
 
@@ -59,6 +63,16 @@ confianza para las medias, gráficos de perfiles, gráfico condicional, correlac
 Para correrlo basta con abrirlo en RStudio y ejecutarlo completo (`Ctrl + Shift + Enter`). Necesita conexión a
 internet; los paquetes que falten (`readxl`, `ggplot2` y `GGally`) se instalan automáticamente.
 
+## Modelo de regresión en R
+
+El script `mod_lin.R` replica el modelo de superficie de respuesta de segundo orden del artículo (19
+coeficientes, variables codificadas en −1, 0 y 1): la tabla ANOVA con sumas de cuadrados tipo III (Tabla 7),
+las medidas de ajuste (Apéndices A2 y A3), las ecuaciones (6) a (9), los gráficos de diagnóstico (Figura 9),
+las superficies de respuesta y contornos (Figura 10) y la revisión del punto óptimo (Tabla 8). Además de los
+paquetes anteriores usa `car`.
+
+Los dos scripts guardan sus figuras en `Articulo_Revista/Figs`.
+
 ## Estructura del repositorio
 
 ```
@@ -66,19 +80,21 @@ Articulo_regresion/
 ├── README.md
 ├── datos.xlsx                    # datos de la Tabla 6 del artículo
 ├── anal_descrip.R                # análisis descriptivo
-└── Articulo_LaTeX/
-    ├── Articulo_regresion.pdf    # artículo compilado
+├── mod_lin.R                     # réplica del modelo de regresión
+└── Articulo_Revista/
+    ├── articulo.pdf              # artículo compilado
     ├── vista_previa.png          # imagen de la primera página (para este README)
-    ├── main.tex                  # documento principal
-    ├── Config/                   # datos del trabajo, preámbulo, colores y fuentes
+    ├── articulo.tex              # documento principal (plantilla de la revista)
     ├── Secciones/                # una sección del artículo por archivo
     ├── Figs/                     # figuras del artículo
-    └── Imágenes/                 # logos
+    ├── mis_referencias.bib       # referencias
+    └── templateRevistaUPTCCiencias.cls
 ```
 
-El artículo se compila con **XeLaTeX** (las fuentes se cargan con `fontspec`), tomando como raíz la carpeta
-del repositorio.
+El artículo usa la plantilla de la Revista Ciencia en Desarrollo y se compila con **pdfLaTeX** (con
+`-shell-escape`, porque la plantilla carga `minted`), con `articulo.tex` como archivo principal.
 
 ## Fuente y licencia de los datos
 
-Los datos y las figuras del montaje experimental provienen del artículo citado arriba. Se usan aquí únicamente con fines académicos.
+Los datos y las figuras del montaje experimental provienen del artículo citado arriba, publicado en acceso
+abierto bajo licencia CC BY-NC 4.0. Se usan aquí únicamente con fines académicos.
