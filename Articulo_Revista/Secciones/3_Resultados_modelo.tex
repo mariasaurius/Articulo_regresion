@@ -57,12 +57,32 @@ $DE$       & $-0.000249$ & 0.000592 &   0.18 & 0.6756 \\
 \end{tabular}
 \end{table}
 
-Gracias a la codificación, los coeficientes se leen directamente:
-\begin{itemize}
-  \item \textbf{Ángulo.} Es el efecto más grande en valor absoluto. Junto con su término cuadrático indica que, con las demás variables en el centro, la eficiencia baja $0.021200 + 0.011317 = 0.0325$ al pasar de 90° a 92.5°, y solo $0.021200 - 0.011317 = 0.0099$ al pasar de 92.5° a 95°. Es la misma curvatura que mostraron las medias descriptivas.
-  \item \textbf{Tipo de rodete y número de boquillas.} Con la codificación $\pm 1$, el coeficiente es la distancia de cada nivel al promedio de los dos. El coeficiente de $D$ ($-0.009864$) indica que el Pelton queda 0.0099 por debajo del promedio y el Turgo 0.0099 por encima, una diferencia de $2 \times 0.009864 = 0.0197$ a favor del Turgo. Del mismo modo, usar dos boquillas aumenta la eficiencia en $2 \times 0.011061 = 0.0221$. Estas diferencias coinciden con las de las medias de la Tabla~\ref{tab:niveles} ($0.6638 - 0.6441$ y $0.6650 - 0.6429$), porque en un diseño balanceado como este los efectos de las variables no se mezclan.
-  \item \textbf{Interacciones.} La interacción $AB$ es negativa: el efecto del diámetro es $-0.004525 - 0.003719\,A$, casi nulo con 90° ($A = -1$) y más negativo con 95° ($A = 1$). Es lo que se vio en la Tabla~\ref{tab:angulo_diametro}. La interacción $BD$ es positiva: el diámetro casi no afecta al Pelton ($D = +1$) y sí al Turgo ($D = -1$), como sugerían las correlaciones dentro de cada rodete de la Figura~\ref{fig:matriz}.
-\end{itemize}
+Gracias a la codificación, los coeficientes se pueden leer reemplazando las variables por sus valores codificados. La idea es siempre la misma: se escoge una condición (por ejemplo, ángulo de 90°, que es $A = -1$), se reemplaza en la ecuación del modelo y se calcula la eficiencia predicha. Para aislar una variable, las demás se dejan en el centro ($B = C = 0$ y $D = E = 0$), de modo que todos los términos que las contienen valen cero y desaparecen. Todas las cuentas siguientes están en la sección~5.2 de \texttt{mod\_lin.R}.
+
+\paragraph{Ángulo.} Con las demás variables en el centro, el modelo se reduce a los términos que solo tienen $A$:
+\[
+\hat{y} = 0.647536 - 0.021200\,A + 0.011317\,A^2 .
+\]
+Reemplazando los tres niveles del ángulo se obtiene la Tabla~\ref{tab:pred_angulo}. Por ejemplo, para 90° ($A = -1$): $0.647536 - 0.021200(-1) + 0.011317(-1)^2 = 0.647536 + 0.021200 + 0.011317 = 0.680053$. La eficiencia predicha baja 0.0325 entre 90° y 92.5° y solo 0.0099 entre 92.5° y 95°. Esa es la curvatura descrita en la Sección~\ref{sec:modelo}, y la producen los dos términos juntos: el término lineal ($-0.021200\,A$) hace que la eficiencia baje al aumentar el ángulo, y el cuadrático ($+0.011317\,A^2$) suma lo mismo en los dos extremos, lo que agranda la caída del lado de 90° y la achica del lado de 95°. Los valores predichos son muy cercanos a las medias observadas por nivel de la Tabla~\ref{tab:niveles}.
+
+\begin{table}[ht]
+\centering
+\caption{Eficiencia predicha según el ángulo, con el diámetro y la distancia en el centro y promediando rodetes y número de boquillas, comparada con la eficiencia media observada.}
+\label{tab:pred_angulo}
+\begin{tabular}{cccc}
+\toprule
+Ángulo & $A$ & Eficiencia predicha & Media observada \\
+\midrule
+90°   & $-1$ & 0.6801 & 0.6813 \\
+92.5° & $0$  & 0.6475 & 0.6478 \\
+95°   & $1$  & 0.6377 & 0.6389 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Tipo de rodete y número de boquillas.} Para el rodete, el modelo se reduce a $\hat{y} = 0.647536 - 0.009864\,D$. El Pelton es $D = +1$, así que su eficiencia predicha es $0.647536 - 0.009864 = 0.6377$; el Turgo es $D = -1$, así que la suya es $0.647536 + 0.009864 = 0.6574$. La diferencia entre los dos es $0.6574 - 0.6377 = 0.0197$. Esa diferencia es exactamente el doble del coeficiente, $2 \times 0.009864$, porque el Pelton y el Turgo están a dos unidades de distancia en la escala codificada (de $-1$ a $+1$). De la misma forma, con una boquilla ($E = +1$) la eficiencia predicha es $0.647536 - 0.011061 = 0.6365$ y con dos ($E = -1$) es $0.6586$, una diferencia de $2 \times 0.011061 = 0.0221$ a favor de usar dos boquillas. Estas diferencias son las mismas que se obtienen con las medias de la Tabla~\ref{tab:niveles} ($0.6638 - 0.6441 = 0.0197$ y $0.6650 - 0.6429 = 0.0221$).
+
+\paragraph{Interacción entre el ángulo y el diámetro.} Si en el modelo se juntan los términos que contienen $B$ (con $C = D = E = 0$), queda $(-0.004525 - 0.003719\,A)\,B + \ldots$; es decir, el coeficiente del diámetro no es fijo, sino que depende del ángulo. Con 90° ($A = -1$) vale $-0.004525 + 0.003719 = -0.0008$, casi cero: el diámetro casi no cambia la eficiencia. Con 95° ($A = 1$) vale $-0.004525 - 0.003719 = -0.0082$: un diámetro más grande baja la eficiencia. Eso es lo que significa que haya interacción, y coincide con lo que se vio en la Tabla~\ref{tab:angulo_diametro}. De la misma forma, la interacción $BD$ hace que el diámetro casi no afecte al Pelton y sí al Turgo, como sugerían las correlaciones dentro de cada rodete de la Figura~\ref{fig:matriz}.
 
 La Tabla~\ref{tab:estadisticas} muestra las medidas de ajuste (sección~8 de \texttt{mod\_lin.R}). El modelo explica el 96.4\,\% de la variabilidad de la eficiencia. El $R^2$ predicho (0.9375) es muy cercano al ajustado (0.9532), lo que indica que el modelo predice casi igual de bien corridas que no usó para ajustarse; el artículo usa como regla que la diferencia entre ambos sea menor que 0.2. La desviación estándar de los errores, 0.0053, equivale a unas cinco milésimas de eficiencia, menos del 1\,\% de la eficiencia media. Todos los valores coinciden con los Apéndices~A2 y~A3 del artículo original.
 
@@ -86,7 +106,15 @@ La precisión adecuada es una medida que reporta Design Expert: compara el rango
 
 \subsection{Ecuaciones para cada tipo de rodete y número de boquillas}
 
-Al fijar el tipo de rodete y el número de boquillas, el modelo queda como una ecuación solo en $A$, $B$ y $C$. Los términos $AB$, $AC$, $BC$, $A^2$, $B^2$ y $C^2$ son los mismos en las cuatro ecuaciones; lo que cambia es el intercepto y los coeficientes de $A$, $B$ y $C$, por las interacciones con $D$ y $E$. La Tabla~\ref{tab:ecuaciones} presenta esos coeficientes (sección~9 de \texttt{mod\_lin.R}), que corresponden a las ecuaciones~(6) a~(9) de \citet{Lakdawala2025}. Todos coinciden con los del artículo excepto uno: el coeficiente de $B$ para el Pelton con dos boquillas aparece en el artículo como $+0.002475$, mientras que el modelo da $-0.002475$. Como el modelo es aditivo en $D$ y $E$, ese coeficiente debe ser igual al del Pelton con una boquilla más el del Turgo con dos menos el del Turgo con una, $0.000375 - 0.009425 + 0.006575 = -0.002475$, lo que indica un error de signo en el artículo.
+\citet{Lakdawala2025} no presentan el modelo~\eqref{eq:modelo2} completo, sino cuatro ecuaciones más cortas, una para cada combinación de rodete y número de boquillas (sus ecuaciones~6 a~9). Esas ecuaciones salen de reemplazar $D$ y $E$ por sus valores en el modelo completo. Por ejemplo, para el Pelton con una boquilla, $D = +1$ y $E = +1$, y los términos que contienen $D$ o $E$ se convierten en números o se suman a otros:
+\begin{itemize}
+  \item El intercepto queda $\beta_0 + \beta_4 + \beta_5 + \beta_{45} = 0.647536 - 0.009864 - 0.011061 - 0.000249 = 0.626362$.
+  \item El coeficiente de $B$ queda $\beta_2 + \beta_{24} + \beta_{25} = -0.004525 + 0.003475 + 0.001425 = 0.000375$, porque los términos $\beta_{24}BD$ y $\beta_{25}BE$ se convierten en $\beta_{24}B$ y $\beta_{25}B$.
+  \item Lo mismo pasa con los coeficientes de $A$ y $C$.
+\end{itemize}
+Los términos que no contienen $D$ ni $E$ ($AB$, $AC$, $BC$, $A^2$, $B^2$ y $C^2$) no cambian, así que son iguales en las cuatro ecuaciones. La Tabla~\ref{tab:ecuaciones} presenta los coeficientes de las cuatro ecuaciones (sección~9 de \texttt{mod\_lin.R}).
+
+Todos coinciden con los del artículo excepto uno. Para el Pelton con dos boquillas ($D = +1$, $E = -1$), el coeficiente de $B$ es $\beta_2 + \beta_{24} - \beta_{25} = -0.004525 + 0.003475 - 0.001425 = -0.002475$, pero el artículo lo imprime como $+0.002475$. Como el resto de esa ecuación sí coincide, se trata de un error de signo en el artículo.
 
 \begin{table}[ht]
 \centering
@@ -110,26 +138,26 @@ Las cuatro ecuaciones confirman lo anterior: el ángulo tiene el coeficiente má
 
 La Figura~\ref{fig:diagnosticos} reproduce los cuatro gráficos de diagnóstico de la Figura~9 del artículo original (sección~10 de \texttt{mod\_lin.R}). En todos, el color de cada punto indica la eficiencia observada en esa corrida.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{minipage}[b]{0.49\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/fig9a_normal_residuales.pdf}\\
+  \includegraphics[width=\textwidth]{Figs/fig9a_normal_residuales.pdf}\\
   {\small (a)}
 \end{minipage}\hfill
 \begin{minipage}[b]{0.49\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/fig9b_predicha_observada.pdf}\\
+  \includegraphics[width=\textwidth]{Figs/fig9b_predicha_observada.pdf}\\
   {\small (b)}
 \end{minipage}\\[6pt]
 \begin{minipage}[b]{0.49\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/fig9c_rint_corrida.pdf}\\
+  \includegraphics[width=\textwidth]{Figs/fig9c_rint_corrida.pdf}\\
   {\small (c)}
 \end{minipage}\hfill
 \begin{minipage}[b]{0.49\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/fig9d_rext_corrida.pdf}\\
+  \includegraphics[width=\textwidth]{Figs/fig9d_rext_corrida.pdf}\\
   {\small (d)}
 \end{minipage}
 \caption{Gráficos de diagnóstico: (a) probabilidad normal de los residuales externamente estudentizados, (b) eficiencia predicha frente a observada, (c) residuales internamente estudentizados y (d) residuales externamente estudentizados frente al número de corrida. Código: sección~10 de \texttt{mod\_lin.R}.}
@@ -149,33 +177,33 @@ En conjunto, los diagnósticos no muestran problemas con los supuestos del model
 
 Con el modelo ajustado se puede predecir la eficiencia en cualquier combinación de valores dentro de la región del experimento. La Figura~\ref{fig:contornos} muestra esas predicciones como gráficos de contorno, en función del ángulo y del diámetro, con la distancia fija en 50~mm y un panel para cada combinación de rodete y número de boquillas (sección~11 de \texttt{mod\_lin.R}). Se leen como un mapa topográfico: cada franja de color agrupa las combinaciones con la misma eficiencia predicha, las líneas negras separan franjas que difieren en 0.01 y los puntos rojos son las corridas del diseño con distancia de 50~mm. La Figura~\ref{fig:superficies} presenta las mismas predicciones como superficies en tres dimensiones, que reproducen la Figura~10 del artículo original.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{Articulo_Revista/Figs/fig10_contornos.pdf}
+\includegraphics[width=0.8\textwidth]{Figs/fig10_contornos.pdf}
 \caption{Contornos de la eficiencia predicha según el ángulo y el diámetro de la boquilla, con la distancia en 50~mm, para cada tipo de rodete (columnas) y número de boquillas (filas). Código: sección~11 de \texttt{mod\_lin.R}.}
 \label{fig:contornos}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{minipage}[b]{0.42\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/fig10a_superficie_pelton_1.pdf}\\
+  \includegraphics[width=\textwidth]{Figs/fig10a_superficie_pelton_1.pdf}\\
   {\small (a) Pelton, 1 boquilla}
 \end{minipage}\hspace{0.04\textwidth}
 \begin{minipage}[b]{0.42\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/fig10b_superficie_turgo_1.pdf}\\
+  \includegraphics[width=\textwidth]{Figs/fig10b_superficie_turgo_1.pdf}\\
   {\small (b) Turgo, 1 boquilla}
 \end{minipage}\\[6pt]
 \begin{minipage}[b]{0.42\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/fig10c_superficie_pelton_2.pdf}\\
+  \includegraphics[width=\textwidth]{Figs/fig10c_superficie_pelton_2.pdf}\\
   {\small (c) Pelton, 2 boquillas}
 \end{minipage}\hspace{0.04\textwidth}
 \begin{minipage}[b]{0.42\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/fig10d_superficie_turgo_2.pdf}\\
+  \includegraphics[width=\textwidth]{Figs/fig10d_superficie_turgo_2.pdf}\\
   {\small (d) Turgo, 2 boquillas}
 \end{minipage}
 \caption{Superficies de respuesta de la eficiencia predicha según el ángulo y el diámetro de la boquilla, con la distancia en 50~mm. Código: sección~11 de \texttt{mod\_lin.R}.}
@@ -188,7 +216,9 @@ En los cuatro paneles la eficiencia predicha aumenta hacia la izquierda, es deci
 
 \citet{Lakdawala2025} reportan como condición óptima el rodete Turgo con dos boquillas, 95°, 14~mm y 40~mm, con una eficiencia predicha de 0.6619. El modelo replicado da la misma predicción en ese punto, y la corrida 53, hecha en esas condiciones, tuvo una eficiencia de 0.6655 (sección~12 de \texttt{mod\_lin.R}).
 
-Sin embargo, ese no es el máximo del modelo. Al evaluar el modelo en una rejilla fina dentro de la región del experimento, la eficiencia predicha máxima de cada combinación de rodete y número de boquillas se alcanza siempre con 90° y 40~mm (Tabla~\ref{tab:maximos}). El máximo global es 0.7190, en el Turgo con dos boquillas, con 90°, 10.6~mm y 40~mm. Esto coincide con el análisis descriptivo, donde la eficiencia media más alta se dio con 90°, y con la corrida 11 (90°, 10~mm, 40~mm, Turgo con dos boquillas), que tuvo la mayor eficiencia observada, 0.7165. El artículo no detalla los criterios de su optimización, así que no es posible saber por qué su punto óptimo está en 95°.
+Sin embargo, ese no es el máximo del modelo. Como el modelo es una ecuación, con él se puede predecir la eficiencia en cualquier combinación de valores, no solo en los niveles que se probaron; por ejemplo, con 91.3° o con 10.6~mm. Para encontrar el máximo se armó una \emph{rejilla}: una lista de combinaciones en la que cada variable codificada va de $-1$ a $1$ en pasos de 0.1 (21 valores para cada una, es decir, 0.25° en el ángulo, 0.2~mm en el diámetro y 1~mm en la distancia), para cada rodete y número de boquillas. En total son $21 \times 21 \times 21 \times 2 \times 2 = 37\,044$ combinaciones. Se calculó la eficiencia predicha en cada una y se buscó la mayor, igual que se buscaría el punto más alto de un mapa revisando muchos puntos cercanos entre sí. La rejilla se limitó a la región del experimento (de 90° a 95°, de 10 a 14~mm y de 40 a 60~mm), porque fuera de ella no hay datos y las predicciones no son confiables (sería extrapolar).
+
+La eficiencia predicha máxima de cada combinación de rodete y número de boquillas se alcanza siempre con 90° y 40~mm (Tabla~\ref{tab:maximos}). El máximo global es 0.7190, en el Turgo con dos boquillas, con 90°, 10.6~mm y 40~mm. Esto coincide con el análisis descriptivo, donde la eficiencia media más alta se dio con 90°, y con la corrida 11 (90°, 10~mm, 40~mm, Turgo con dos boquillas), que tuvo la mayor eficiencia observada, 0.7165. El artículo no detalla los criterios de su optimización, así que no es posible saber por qué su punto óptimo está en 95°.
 
 \begin{table}[ht]
 \centering

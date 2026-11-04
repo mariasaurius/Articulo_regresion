@@ -1,4 +1,4 @@
-\documentclass{templateRevistaUPTCCiencias}
+\documentclass{Articulo_Revista/templateRevistaUPTCCiencias}
 %\usepackage{templateRevistaUPT}
 \usepackage{times,mathptmx}
 \usepackage{lastpage}
@@ -41,6 +41,7 @@
 \usepackage{minted} % Code Highlighting with minted
 
 \usepackage{multirow} % Para celdas que ocupan varias filas en las tablas
+\usepackage{float}    % Para fijar las figuras donde se escriben con [H]
 
 
 % //// --------------------------------------------------------------------------------
@@ -48,6 +49,10 @@
 % Espacio reservado para colocar las definiciones especiales por parte del autor
 % **** --------------------------------------------------------------------------------
 % Nombres en español para figuras, tablas y referencias (el artículo está en español)
+% Rutas: el proyecto se compila desde la carpeta raíz del repositorio,
+% así que todo lo del artículo se busca dentro de Articulo_Revista/
+\graphicspath{{Articulo_Revista/}}
+
 % Enlaces y citas sin recuadros de colores
 \hypersetup{hidelinks}
 
@@ -111,7 +116,7 @@ should be addressed.}
 % Espacio reservado para colocar el resumen en el idioma principal y las palabras clave
 % No dejar salto de l\'inea entre el resumen y el comando \keywords{.}¡
 % **** --------------------------------------------------------------------------------
-\input{Secciones/0_Resumen}
+\input{Articulo_Revista/Secciones/0_Resumen}
 
 %-------------------------------------------------------------------------------
 % Cada sección está en su propio archivo dentro de la carpeta Secciones
@@ -129,13 +134,12 @@ should be addressed.}
 \input{Articulo_Revista/Secciones/3_Resultados}
 \input{Articulo_Revista/Secciones/3_Resultados_modelo}
 
-\clearpage % para que todas las figuras queden antes de las referencias
 \input{Articulo_Revista/Secciones/4_Disponibilidad}
 
 %-------------------------------------------------------------------------------
 
 %-------------------------------------------------------------------------------
-\bibliography{mis_referencias}
+\bibliography{Articulo_Revista/mis_referencias}
 
 %-------------------------------------------------------------------------------
 \appendix
