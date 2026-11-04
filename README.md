@@ -92,7 +92,9 @@ Articulo_regresion/
 ```
 
 El artículo usa la plantilla de la Revista Ciencia en Desarrollo y se compila con **pdfLaTeX** (con
-`-shell-escape`, porque la plantilla carga `minted`), con `articulo.tex` como archivo principal.
+`-shell-escape`, porque la plantilla carga `minted`), con `Articulo_Revista/articulo.tex` como archivo
+principal y tomando como raíz la carpeta del repositorio: todas las rutas del documento empiezan por
+`Articulo_Revista/`.
 
 ## Fuente y licencia de los datos
 
