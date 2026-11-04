@@ -32,21 +32,55 @@ Los datos y el código del análisis están disponibles en \url{https://github.c
 \subsection{Modelo de regresión}
 \label{sec:modelo}
 
-El objetivo es encontrar una ecuación que prediga la eficiencia a partir de las cinco variables. El análisis descriptivo de la Sección~\ref{sec:descriptivo} mostró dos cosas que esa ecuación debe poder representar: curvatura (la eficiencia cae más del nivel bajo al medio que del medio al alto) y posibles interacciones (el efecto de una variable parece depender de otra). Por eso, siguiendo a \citet{Lakdawala2025}, se usa un modelo de segundo orden, el modelo típico de la metodología de superficie de respuesta.
+El objetivo es encontrar una ecuación que prediga la eficiencia a partir de las cinco variables. El análisis descriptivo de la Sección~\ref{sec:descriptivo} mostró dos cosas que esa ecuación debe poder representar.
+
+\begin{itemize}
+  \item \textbf{Curvatura.} La eficiencia no baja en línea recta cuando aumenta el ángulo. Según la Tabla~\ref{tab:niveles}, la eficiencia media pasa de 0.6813 a 90° a 0.6478 a 92.5° (baja 0.0335) y luego a 0.6389 a 95° (baja solo 0.0089). Los dos pasos son de 2.5°, pero la primera caída es casi cuatro veces la segunda. Si la relación fuera una recta, las dos caídas serían iguales. Con la distancia pasa algo parecido.
+  \item \textbf{Interacciones.} El efecto de una variable parece depender de otra; por ejemplo, el diámetro casi no cambia la eficiencia con 90° pero sí con 95° (Tabla~\ref{tab:angulo_diametro}).
+\end{itemize}
+
+Un modelo con solo rectas no puede representar ninguna de las dos cosas. Por eso, siguiendo a \citet{Lakdawala2025}, se usa un modelo de segundo orden, que es el modelo típico de la metodología de superficie de respuesta.
 
 \subsubsection{Codificación de las variables}
 
-Antes de ajustar el modelo, las variables se pasan a una escala común. Cada variable numérica se codifica de modo que su nivel bajo valga $-1$, el medio $0$ y el alto $1$:
-\[
-A = \frac{\text{ángulo} - 92.5}{2.5}, \qquad
-B = \frac{\text{diámetro} - 12}{2}, \qquad
-C = \frac{\text{distancia} - 50}{10}.
-\]
-Las dos variables categóricas también se codifican con $+1$ y $-1$: el tipo de rodete $D$ vale $+1$ para el Pelton y $-1$ para el Turgo, y el número de boquillas $E$ vale $+1$ con una boquilla y $-1$ con dos. Esta codificación tiene tres ventajas. Las variables quedan en la misma escala, así que el tamaño de sus coeficientes se puede comparar directamente. El intercepto pasa a ser la eficiencia predicha en el centro del diseño (92.5°, 12~mm y 50~mm), promediando entre rodetes y entre número de boquillas. Y es la escala que usa el programa Design Expert, con el que los autores ajustaron su modelo, de modo que los coeficientes se pueden comparar con los del artículo.
+Antes de ajustar el modelo, las variables se pasan a una escala común. Cada variable numérica se codifica de modo que su nivel bajo valga $-1$, el medio $0$ y el alto $1$, y las dos categóricas se codifican con $+1$ y $-1$. La Tabla~\ref{tab:codificacion} resume las cinco variables codificadas, que se llaman $A$, $B$, $C$, $D$ y $E$, como en el artículo original.
+
+\begin{table}[ht]
+\centering
+\caption{Codificación de las variables del modelo.}
+\label{tab:codificacion}
+\small
+\begin{tabular}{clllc}
+\toprule
+Símbolo & Variable & Niveles originales & Fórmula & Codificada \\
+\midrule
+$A$ & Ángulo de la boquilla     & 90°, 92.5°, 95°    & $(\text{ángulo} - 92.5)/2.5$    & $-1$, $0$, $1$ \\
+$B$ & Diámetro de la boquilla   & 10, 12, 14 mm      & $(\text{diámetro} - 12)/2$      & $-1$, $0$, $1$ \\
+$C$ & Distancia boquilla-rodete & 40, 50, 60 mm      & $(\text{distancia} - 50)/10$    & $-1$, $0$, $1$ \\
+$D$ & Tipo de rodete            & Pelton, Turgo      & Pelton $= +1$, Turgo $= -1$     & $+1$, $-1$ \\
+$E$ & Número de boquillas       & 1, 2               & Una $= +1$, dos $= -1$          & $+1$, $-1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La fórmula de las numéricas resta el valor central y divide por la mitad del rango. Por ejemplo, para el ángulo: $(90 - 92.5)/2.5 = -1$, $(92.5 - 92.5)/2.5 = 0$ y $(95 - 92.5)/2.5 = 1$. La codificación tiene tres ventajas.
+
+\begin{enumerate}
+  \item \textbf{Permite comparar el tamaño de los coeficientes.} En las unidades originales, el coeficiente de una variable dice cuánto cambia la eficiencia por cada unidad de esa variable: por cada grado de ángulo o por cada milímetro de distancia. Pero esas unidades no son comparables entre sí: un grado es la quinta parte del rango del ángulo (de 90° a 95°), mientras que un milímetro es apenas la vigésima parte del rango de la distancia (de 40 a 60~mm). Una variable podría tener un coeficiente pequeño solo porque su unidad es pequeña, no porque importe poco. Con la codificación, una unidad es lo mismo para todas las variables: ir del centro al extremo de su rango. Así, el coeficiente más grande en valor absoluto corresponde a la variable que más mueve la eficiencia dentro del experimento.
+  \item \textbf{Le da sentido al intercepto.} El intercepto es la predicción cuando todas las variables valen cero. En las unidades originales eso sería un ángulo de 0° y una boquilla de 0~mm, condiciones que no tienen sentido. Con la codificación, $A = B = C = 0$ es el centro del diseño (92.5°, 12~mm y 50~mm), y $D = E = 0$ es el punto medio entre $+1$ y $-1$, es decir, el promedio entre los dos rodetes y entre una y dos boquillas. Por eso el intercepto es la eficiencia predicha en el centro del diseño, promediando rodetes y número de boquillas.
+  \item \textbf{Permite comparar con el artículo.} Es la escala que usa el programa Design Expert, con el que los autores ajustaron su modelo.
+\end{enumerate}
 
 \subsubsection{El modelo de segundo orden}
 
-El modelo es
+La forma general de un modelo de segundo orden con $k$ variables es
+\begin{equation}
+y = \beta_0 + \sum_{i=1}^{k} \beta_i x_i + \sum_{i=1}^{k} \beta_{ii} x_i^2 + \sum_{i<j} \beta_{ij} x_i x_j + \varepsilon,
+\label{eq:general}
+\end{equation}
+es decir, tiene un intercepto, un término de primer orden para cada variable ($x_i$), un término cuadrático para cada variable ($x_i^2$) y un término de interacción para cada pareja de variables ($x_i x_j$) \citep{Montgomery2005}. Con $k$ variables hay $k$ términos de primer orden, $k$ cuadráticos y $k(k-1)/2$ interacciones; con $k = 5$ serían $1 + 5 + 5 + 10 = 21$ coeficientes.
+
+El modelo de este trabajo tiene 19 y no 21 porque le faltan los cuadrados de $D$ y $E$. Como esas variables solo valen $+1$ o $-1$, su cuadrado siempre es $(+1)^2 = (-1)^2 = 1$: una columna de unos, igual a la del intercepto, que no aporta información nueva. Por eso solo las variables numéricas, que tienen tres niveles, llevan término cuadrático. El modelo queda así:
 \begin{align}
 y = \beta_0
 &+ \underbrace{\beta_1 A + \beta_2 B + \beta_3 C + \beta_4 D + \beta_5 E}_{\text{5 efectos principales}}
@@ -55,19 +89,45 @@ y = \beta_0
  + \varepsilon, \qquad \varepsilon \sim N(0, \sigma^2),
 \label{eq:modelo2}
 \end{align}
-y tiene en total $1 + 5 + 3 + 10 = 19$ coeficientes. Cada grupo de términos cumple una función:
+con $1 + 5 + 3 + 10 = 19$ coeficientes. Cada grupo de términos cumple una función:
 \begin{itemize}
-  \item \textbf{Intercepto} ($\beta_0$): la eficiencia predicha en el centro del diseño.
-  \item \textbf{Efectos principales} ($\beta_1, \ldots, \beta_5$): cuánto cambia la eficiencia cuando una variable pasa del centro a su nivel alto, con las demás en el centro.
-  \item \textbf{Términos cuadráticos} ($\beta_{11}, \beta_{22}, \beta_{33}$): permiten que la relación sea una curva y no una recta, es decir, que el cambio de $-1$ a $0$ sea distinto del cambio de $0$ a $1$. Solo se incluyen para las tres variables numéricas: $D$ y $E$ valen $+1$ o $-1$, y al elevarlas al cuadrado siempre dan 1, así que su cuadrado no aporta información.
-  \item \textbf{Interacciones dobles} ($\beta_{12}, \ldots, \beta_{45}$): el producto de dos variables permite que el efecto de una dependa del valor de la otra. Con cinco variables hay $\binom{5}{2} = 10$ parejas posibles: $AB$, $AC$, $AD$, $AE$, $BC$, $BD$, $BE$, $CD$, $CE$ y $DE$.
+  \item \textbf{Intercepto} ($\beta_0$): la eficiencia predicha en el centro del diseño, como se explicó arriba.
+  \item \textbf{Efectos principales} ($\beta_1, \ldots, \beta_5$): el efecto de cada variable por sí sola, con las demás en el centro. Como cada variable va de $-1$ a $1$, su coeficiente es la mitad de la diferencia entre la eficiencia predicha en el nivel alto y en el nivel bajo. Por ejemplo, $\beta_1$ es la mitad de la diferencia entre la eficiencia predicha con 95° y con 90°. Si es negativo, la eficiencia es menor en el nivel alto que en el bajo.
+  \item \textbf{Términos cuadráticos} ($\beta_{11}, \beta_{22}, \beta_{33}$): permiten que la relación sea una curva y no una recta, es decir, que la caída de $-1$ a $0$ sea distinta de la caída de $0$ a $1$, como pasa con el ángulo.
+  \item \textbf{Interacciones dobles} ($\beta_{12}, \ldots, \beta_{45}$): el producto de dos variables permite que el efecto de una dependa del valor de la otra. Con cinco variables hay $5 \times 4 / 2 = 10$ parejas posibles: $AB$, $AC$, $AD$, $AE$, $BC$, $BD$, $BE$, $CD$, $CE$ y $DE$.
 \end{itemize}
 
-Aunque la ecuación tiene cuadrados y productos, sigue siendo un modelo de \emph{regresión lineal}. La palabra \emph{lineal} se refiere a los coeficientes $\beta$, no a las variables: la eficiencia es una suma de coeficientes multiplicados por columnas de datos. Una columna como $A^2$ o $AB$ se calcula a partir de los datos antes de ajustar el modelo y, para el método de estimación, es una variable más. Por eso el modelo~\eqref{eq:modelo2} es un caso de la regresión lineal múltiple con una matriz de diseño $\mathbf{X}$ de 80 filas y 19 columnas, y sus coeficientes se estiman por mínimos cuadrados, $\hat{\bm{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$ \citep{Montgomery2005}. Un modelo no lineal sería, por ejemplo, $y = \beta_0 e^{\beta_1 A}$, donde un coeficiente aparece dentro de una exponencial. En R el modelo se ajusta con la función \texttt{lm()}.
+Aunque la ecuación tiene cuadrados y productos, sigue siendo un modelo de \emph{regresión lineal}. La palabra \emph{lineal} se refiere a los coeficientes $\beta$, no a las variables: la eficiencia es una suma de coeficientes multiplicados por columnas de datos. Una columna como $A^2$ o $AB$ se calcula a partir de los datos antes de ajustar el modelo y, para el método de estimación, es una variable más. Un modelo no lineal sería, por ejemplo, $y = \beta_0 e^{\beta_1 A}$, donde un coeficiente aparece dentro de una exponencial.
+
+\subsubsection{La matriz de diseño}
+
+Escrito en forma matricial, el modelo es $\mathbf{y} = \mathbf{X}\bm{\beta} + \bm{\varepsilon}$, donde $\mathbf{y}$ tiene las 80 eficiencias, $\bm{\beta}$ los 19 coeficientes y $\mathbf{X}$ es la matriz de diseño, con una fila por corrida y una columna por coeficiente. La Tabla~\ref{tab:matrizX} muestra cuatro filas de $\mathbf{X}$ (sección~5.1 de \texttt{mod\_lin.R}). La primera columna es de unos (para el intercepto); las cinco siguientes son las variables codificadas, y las demás se obtienen elevando al cuadrado o multiplicando esas columnas. Por ejemplo, en la corrida~2 ($A = -1$, $B = 1$) la columna $AB$ vale $(-1)(1) = -1$, y en la corrida~5, que está en el centro del diseño, todas las columnas que contienen $A$, $B$ o $C$ valen cero.
+
+\begin{table}[ht]
+\centering
+\caption{Cuatro filas de la matriz de diseño $\mathbf{X}$: corrida 1 (95°, 12~mm, 50~mm, Pelton, dos boquillas), corrida 2 (90°, 14~mm, 40~mm, Turgo, una boquilla), corrida 5 (punto central, Turgo, dos boquillas) y corrida 11 (90°, 10~mm, 40~mm, Turgo, dos boquillas).}
+\label{tab:matrizX}
+\setlength{\tabcolsep}{2.6pt}
+\footnotesize
+\begin{tabular}{c|r|rrrrr|rrr|rrrrrrrrrr}
+\toprule
+Corr. & 1 & $A$ & $B$ & $C$ & $D$ & $E$ & $A^2$ & $B^2$ & $C^2$ & $AB$ & $AC$ & $AD$ & $AE$ & $BC$ & $BD$ & $BE$ & $CD$ & $CE$ & $DE$ \\
+\midrule
+1  & 1 &  1 &  0 &  0 &  1 & $-1$ & 1 & 0 & 0 &  0 & 0 & 1 & $-1$ &  0 &  0 & 0 & 0 &  0 & $-1$ \\
+2  & 1 & $-1$ &  1 & $-1$ & $-1$ &  1 & 1 & 1 & 1 & $-1$ & 1 & 1 & $-1$ & $-1$ & $-1$ & 1 & 1 & $-1$ & $-1$ \\
+5  & 1 &  0 &  0 &  0 & $-1$ & $-1$ & 0 & 0 & 0 &  0 & 0 & 0 &  0 &  0 &  0 & 0 & 0 &  0 &  1 \\
+11 & 1 & $-1$ & $-1$ & $-1$ & $-1$ & $-1$ & 1 & 1 & 1 &  1 & 1 & 1 &  1 &  1 &  1 & 1 & 1 &  1 &  1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Los coeficientes se estiman por mínimos cuadrados, $\hat{\bm{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$, igual que en cualquier regresión lineal múltiple \citep{Montgomery2005}. En R el modelo se ajusta con la función \texttt{lm()}.
 
 \subsubsection{Evaluación del modelo}
 
-La significancia de cada término se evalúa con un análisis de varianza (ANOVA) con sumas de cuadrados tipo III, como en el artículo original. La suma de cuadrados tipo III de un término mide cuánto aumenta el error del modelo si se quita \emph{solo} ese término y se dejan todos los demás; es decir, evalúa cada término como si fuera el último en entrar al modelo, y por eso el resultado no depende del orden en que se escriban los términos. Se calculó con la función \texttt{Anova()} del paquete \textsf{car} \citep{Fox2019}.
+La significancia de cada término se evalúa con un análisis de varianza (ANOVA) con sumas de cuadrados tipo III, como en el artículo original. Para entender por qué se usa esta, conviene compararla con la suma de cuadrados tipo I, que es la que da la función \texttt{anova()} de R. La tipo I agrega los términos uno por uno, en el orden en que están escritos en la fórmula, y a cada término le asigna lo que reduce el error \emph{en el momento en que entra}. Si dos términos explican en parte lo mismo, el que entra primero se queda con esa parte y el que entra después recibe solo lo que agrega de nuevo; al cambiar el orden, cambian los resultados. Es como repartir el mérito de un trabajo en grupo según quién habló primero.
+
+La tipo III evita ese problema. A cada término le asigna lo que reduce el error cuando se agrega a un modelo que ya tiene \emph{todos} los demás términos, es decir, solo lo que ese término explica y ningún otro puede explicar. Como cada término se compara siempre con el mismo conjunto (todos los demás), no importa el orden en que se escriban. Se calculó con la función \texttt{Anova()} del paquete \textsf{car} \citep{Fox2019}.
 
 Además se usan las siguientes medidas:
 \begin{itemize}
@@ -78,4 +138,3 @@ Además se usan las siguientes medidas:
 \end{itemize}
 
 Los supuestos del modelo (errores normales, con varianza constante e independientes) se revisan con los residuales estudentizados. Un residual estudentizado es el residual dividido por una estimación de su desviación estándar, de modo que todos quedan en una escala comparable, parecida a la de una normal estándar. El internamente estudentizado usa la desviación estándar del modelo completo; el externamente estudentizado usa la de un modelo ajustado sin esa corrida, para que una corrida atípica no afecte la escala con la que se juzga a sí misma.
-

@@ -44,16 +44,16 @@ La Figura~\ref{fig:distribucion} muestra estas características de forma gráfic
 
 El panel~(b) es un diagrama de caja. La caja va del primer al tercer cuartil ($Q_1 = 0.6360$ y $Q_3 = 0.6715$), así que su altura es el rango intercuartílico y contiene al 50\,\% central de las corridas; la línea negra dentro de la caja es la mediana. Los bigotes se extienden hasta la corrida más extrema que esté a menos de $1.5 \times \text{RIQ}$ de la caja, es decir, entre 0.5828 y 0.7248; los valores por fuera de esos límites se considerarían atípicos. Los puntos negros son las 80 corridas, separadas un poco en horizontal para que no se superpongan. Ninguna corrida queda por fuera de los bigotes, así que no hay eficiencias atípicas, y la mediana está algo más cerca del borde inferior de la caja, otra señal de la leve asimetría a la derecha.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{minipage}[b]{0.62\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/g1_histograma.pdf}\\[-2pt]
+  \includegraphics[width=\textwidth]{Figs/g1_histograma.pdf}\\[-2pt]
   {\small (a)}
 \end{minipage}\hfill
 \begin{minipage}[b]{0.35\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/g2_boxplot.pdf}\\[-2pt]
+  \includegraphics[width=\textwidth]{Figs/g2_boxplot.pdf}\\[-2pt]
   {\small (b)}
 \end{minipage}
 \caption{Histograma con curva de densidad (a) y diagrama de caja (b) de la eficiencia hidráulica. La línea roja discontinua marca la media. Código: sección~4 de \texttt{anal\_descrip.R}.}
@@ -95,9 +95,9 @@ Variable & Nivel & $n$ & Media & Desv. est. & Mínimo & Máximo \\
 
 El ángulo de la boquilla es la variable con el efecto más claro: la eficiencia media baja de 0.681 a 90° a 0.639 a 95°, y la caja de 90° está por completo por encima de las otras dos. El rodete Turgo es en promedio más eficiente que el Pelton (0.664 frente a 0.644) y usar dos boquillas también aumenta la eficiencia media (0.665 frente a 0.643); en ambos casos las cajas se desplazan hacia arriba, aunque se superponen en parte. Con el diámetro y la distancia la eficiencia media es mayor en el nivel bajo (10~mm y 40~mm), pero las diferencias son menores y las cajas se superponen mucho, porque la dispersión dentro de cada nivel es grande.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{Articulo_Revista/Figs/g3_boxplot_por_variable.pdf}
+\includegraphics[width=0.92\textwidth]{Figs/g3_boxplot_por_variable.pdf}
 \caption{Eficiencia hidráulica según cada variable explicativa. Los rombos rojos marcan la media de cada grupo. Código: sección~5 de \texttt{anal\_descrip.R}.}
 \label{fig:por_variable}
 \end{figure}
@@ -110,9 +110,9 @@ Los diagramas de caja muestran cómo se reparten las corridas; para comparar los
 \]
 donde $\bar{y}$, $s$ y $n$ son la media, la desviación estándar y el número de corridas del nivel. Cada punto es una media, las barras son el intervalo y la línea une las medias para mostrar la tendencia. La Tabla~\ref{tab:ic} presenta los mismos intervalos (sección~6 del script).
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{Articulo_Revista/Figs/g4_medias_ic95.pdf}
+\includegraphics[width=0.92\textwidth]{Figs/g4_medias_ic95.pdf}
 \caption{Eficiencia media e intervalo de confianza del 95\,\% para cada nivel de cada variable explicativa. Código: sección~6 de \texttt{anal\_descrip.R}.}
 \label{fig:medias}
 \end{figure}
@@ -154,21 +154,21 @@ Los intervalos de los niveles medios son más angostos (alrededor de 0.011 a 0.0
 
 La Figura~\ref{fig:perfiles} presenta gráficos de perfiles (sección~7 del script). Cada línea corresponde a una combinación de tipo de rodete y número de boquillas, y cada punto es la eficiencia media de las corridas de esa combinación en un nivel de la variable del eje horizontal. Este gráfico sirve para buscar interacciones: si el efecto de una variable es el mismo en todas las combinaciones, las líneas son paralelas y solo se desplazan hacia arriba o hacia abajo; si las líneas tienen pendientes distintas o se cruzan, el efecto de esa variable depende del tipo de rodete o del número de boquillas.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{minipage}[b]{0.49\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/perfil_angulo.pdf}\\[-2pt]
+  \includegraphics[width=\textwidth]{Figs/perfil_angulo.pdf}\\[-2pt]
   {\small (a)}
 \end{minipage}\hfill
 \begin{minipage}[b]{0.49\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/perfil_diametro.pdf}\\[-2pt]
+  \includegraphics[width=\textwidth]{Figs/perfil_diametro.pdf}\\[-2pt]
   {\small (b)}
 \end{minipage}\\[6pt]
 \begin{minipage}[b]{0.49\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{Articulo_Revista/Figs/perfil_distancia.pdf}\\[-2pt]
+  \includegraphics[width=\textwidth]{Figs/perfil_distancia.pdf}\\[-2pt]
   {\small (c)}
 \end{minipage}
 \caption{Perfiles de la eficiencia media según el ángulo (a), el diámetro (b) y la distancia (c), para cada combinación de tipo de rodete y número de boquillas. Código: sección~7 de \texttt{anal\_descrip.R}.}
@@ -181,9 +181,9 @@ Se ven tres cosas. Primero, la separación vertical entre las líneas confirma l
 
 La Figura~\ref{fig:condicional} muestra cada corrida por separado (sección~8 del script). El eje horizontal es el ángulo y el vertical la eficiencia; los cuatro paneles separan el tipo de rodete (columnas) y el número de boquillas (filas), y el color indica el diámetro de la boquilla. Los puntos se movieron un poco en horizontal para que no se tapen entre sí. A diferencia de los gráficos anteriores, que resumen con medias, este permite ver tres variables a la vez sin promediar.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{Articulo_Revista/Figs/g5_condicional.pdf}
+\includegraphics[width=0.85\textwidth]{Figs/g5_condicional.pdf}
 \caption{Eficiencia frente al ángulo de la boquilla, por tipo de rodete (columnas) y número de boquillas (filas); el color indica el diámetro. Código: sección~8 de \texttt{anal\_descrip.R}.}
 \label{fig:condicional}
 \end{figure}
@@ -234,9 +234,9 @@ La Figura~\ref{fig:matriz} es una matriz de dispersión que reúne todas las var
   \item \textbf{La última columna} compara cada variable entre los dos rodetes con diagramas de caja, y \textbf{la última fila} muestra los histogramas por rodete.
 \end{itemize}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Articulo_Revista/Figs/g6_matriz_dispersion.pdf}
+\includegraphics[width=0.9\textwidth]{Figs/g6_matriz_dispersion.pdf}
 \caption{Matriz de dispersión de las variables numéricas y del tipo de rodete (verde: Pelton, naranja: Turgo). Código: sección~9 de \texttt{anal\_descrip.R}.}
 \label{fig:matriz}
 \end{figure}
